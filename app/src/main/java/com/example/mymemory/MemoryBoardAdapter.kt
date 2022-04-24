@@ -2,25 +2,30 @@ package com.example.mymemory
 
 import BoardSize
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mymemory.models.MemoryCard
 import kotlin.math.min
 
 class MemoryBoardAdapter(
     private val context: Context,
     private val boardSize: BoardSize,
-    private val cardImages: List<Int>
+    private val cardImages: List<MemoryCard>,
+    private val cardClickListener: CardClickListener
 ) :
     RecyclerView.Adapter<MemoryBoardAdapter.ViewHolder>() {
 
     companion object {
         private const val MARGIN_SIZE = 10
         private const val TAG = "MemoryBoardAdapter"
+    }
+
+    interface CardClickListener{
+        fun onCardClick(position: Int)
     }
     // how to create one view
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -50,12 +55,12 @@ class MemoryBoardAdapter(
         private val imageView = itemView.findViewById<ImageButton>(R.id.imageButton)
 
         fun bind(position: Int) {
-            imageView.setImageResource(cardImages[position])
+            val memoryCard = cardImages[position]
+            imageView.setImageResource(if (memoryCard.isfacedUp) memoryCard.identifier else R.drawable.ic_launcher_background)
             imageView.setOnClickListener(){
-                Log.d(TAG, "clicked on $position")
+                cardClickListener.onCardClick(position)
             }
         }
     }
-
 }
 
