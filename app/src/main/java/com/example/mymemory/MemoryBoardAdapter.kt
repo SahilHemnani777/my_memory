@@ -56,6 +56,8 @@ class MemoryBoardAdapter(
 
         fun bind(position: Int) {
             val memoryCard = cardImages[position]
+            imageView.alpha = if(memoryCard.isMatched) .4f else 1.0f
+
             imageView.setImageResource(if (memoryCard.isfacedUp) memoryCard.identifier else R.drawable.ic_launcher_background)
             imageView.setOnClickListener(){
                 cardClickListener.onCardClick(position)
