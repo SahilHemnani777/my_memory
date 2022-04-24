@@ -7,9 +7,7 @@ import android.util.Log
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mymemory.models.MemoryCard
 import com.example.mymemory.models.MemoryGame
-import com.example.mymemory.utils.DEFAULT_ICONS
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,7 +29,8 @@ class MainActivity : AppCompatActivity() {
 
         rvBoard.adapter = MemoryBoardAdapter(this, boardSize, memoryGame.cards, object : MemoryBoardAdapter.CardClickListener{
             override fun onCardClick(position: Int) {
-                Log.d("TAG", position.toString())
+                memoryGame.flipCard(position)
+                rvBoard.adapter?.notifyDataSetChanged()
             }
 
         })
@@ -41,4 +40,6 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+
 }
