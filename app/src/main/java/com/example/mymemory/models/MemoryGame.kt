@@ -10,6 +10,8 @@ class MemoryGame(private val boardSize : BoardSize){
 
     private var indexOfSingleSelectedCard : Int? = null
 
+    private var numCardFlips = 0;
+
     init {
         // for n card memory game we need n/2 images
         val chosenImages = DEFAULT_ICONS.shuffled().take(boardSize.getNumPairs())
@@ -19,6 +21,7 @@ class MemoryGame(private val boardSize : BoardSize){
     }
 
     fun flipCard(position: Int) : Boolean{
+        numCardFlips++
         val card = cards[position]
         // Three cases
         // 0 card flipped over- flip over the selected card
@@ -66,5 +69,9 @@ class MemoryGame(private val boardSize : BoardSize){
 
     fun isFlippedUp(position: Int): Boolean {
         return cards[position].isfacedUp
+    }
+
+    fun getNumMoves(): Int {
+        return numCardFlips /2
     }
 }
