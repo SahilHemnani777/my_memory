@@ -1,5 +1,6 @@
 package com.example.mymemory
 
+import BoardSize
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,10 +9,9 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
-import kotlin.math.log
 import kotlin.math.min
 
-class MemoryBoardAdapter(private val context: Context,private val numPieces: Int) :
+class MemoryBoardAdapter(private val context: Context, private val boardSize: BoardSize) :
     RecyclerView.Adapter<MemoryBoardAdapter.ViewHolder>() {
 
     companion object {
@@ -20,8 +20,8 @@ class MemoryBoardAdapter(private val context: Context,private val numPieces: Int
     }
     // how to create one view
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val cardWidth = parent.width / 2 - (2* MARGIN_SIZE)
-        val cardHeight = parent.height / 4 - (2* MARGIN_SIZE)
+        val cardWidth = parent.width / boardSize.getWidth() - (2* MARGIN_SIZE)
+        val cardHeight = parent.height / boardSize.getHeight() - (2* MARGIN_SIZE)
         val cardSideLength = min(cardHeight, cardWidth)
         val view = LayoutInflater.from(context).inflate(R.layout.memory_card, parent, false)
         val layoutParams = view.findViewById<CardView>(R.id.cardView).layoutParams as ViewGroup.MarginLayoutParams
@@ -38,7 +38,7 @@ class MemoryBoardAdapter(private val context: Context,private val numPieces: Int
 
     // how many elements in our recycler view
     override fun getItemCount(): Int {
-        return  numPieces
+        return  boardSize.numCards
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

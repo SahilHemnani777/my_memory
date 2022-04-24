@@ -1,5 +1,6 @@
 package com.example.mymemory
 
+import BoardSize
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
@@ -12,6 +13,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var movesTextView : TextView
     private lateinit var pairsTextView: TextView
 
+    private val boardSize: BoardSize = BoardSize.EASY
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -20,9 +23,9 @@ class MainActivity : AppCompatActivity() {
         movesTextView= findViewById(R.id.movesTextView)
         pairsTextView= findViewById(R.id.pairsTextView)
 
-        rvBoard.adapter = MemoryBoardAdapter(this, 8)
+        rvBoard.adapter = MemoryBoardAdapter(this, boardSize)
         rvBoard.hasFixedSize()
-        rvBoard.layoutManager = GridLayoutManager(this, 2)
+        rvBoard.layoutManager = GridLayoutManager(this, boardSize.getWidth())
 
 
 
