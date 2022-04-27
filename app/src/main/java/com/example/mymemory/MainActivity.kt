@@ -2,7 +2,6 @@ package com.example.mymemory
 
 import BoardSize
 import android.animation.ArgbEvaluator
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
