@@ -6,7 +6,11 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -33,16 +37,7 @@ class MainActivity : AppCompatActivity() {
         movesTextView= findViewById(R.id.movesTextView)
         pairsTextView= findViewById(R.id.pairsTextView)
 
-        memoryGame = MemoryGame(boardSize)
-
-        rvBoard.adapter = MemoryBoardAdapter(this, boardSize, memoryGame.cards, object : MemoryBoardAdapter.CardClickListener{
-            override fun onCardClick(position: Int) {
-                updateGameWIthFlip(position)
-            }
-
-        })
-        rvBoard.hasFixedSize()
-        rvBoard.layoutManager = GridLayoutManager(this, boardSize.getWidth())
+        setUpBoard()
 
     }
 
@@ -76,5 +71,61 @@ class MainActivity : AppCompatActivity() {
         rvBoard.adapter?.notifyDataSetChanged()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.refresh -> {
+                if(memoryGame.getNumMoves() > 0 && !memoryGame.haveWonGame()){
+                    showAlertDialogue("Quit your current game?", null, View.OnClickListener {
+                        setUpBoard()
+                    })
+                }else{
+                    setUpBoard()
+                }
+            }
+        }
+        return true
+    }
+
+    private fun setUpBoard(){
+        when(boardSize){
+            BoardSize.EASY -> {
+                pairsTextView.text = "Pairs: 0 / 4"
+                movesTextView.text ="Easy: 4 X 2"
+            }
+            BoardSize.MEDIUM -> {
+                pairsTextView.text = "Pairs: 0 / 9"
+                movesTextView.text ="Easy: 6 X 3"
+            }
+            BoardSize.HARD -> {
+                pairsTextView.text = "Pairs: 0 / 12"
+                movesTextView.text ="Easy: 6 X 4"
+            }
+        }
+        pairsTextView.setTextColor(ContextCompat.getColor(this, R.color.color_progress_none))
+        memoryGame = MemoryGame(boardSize)
+
+        rvBoard.adapter = MemoryBoardAdapter(this, boardSize, memoryGame.cards, object : MemoryBoardAdapter.CardClickListener{
+            override fun onCardClick(position: Int){
+                updateGameWIthFlip(position)
+            }
+
+        })
+        rvBoard.hasFixedSize()
+        rvBoard.layoutManager = GridLayoutManager(this, boardSize.getWidth())
+    }
+
+    private fun showAlertDialogue(title: String, view: View?, positiveClickListener : View.OnClickListener) {
+        AlertDialog.Builder(this)
+                .setTitle(title)
+                .setView(view)
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("Ok") { _, _ ->
+                    positiveClickListener.onClick(null)
+                }.show()
+    }
 }
