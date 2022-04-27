@@ -6,9 +6,11 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -26,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var movesTextView : TextView
     private lateinit var pairsTextView: TextView
 
-    private val boardSize: BoardSize = BoardSize.EASY
+    private var boardSize: BoardSize = BoardSize.EASY
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,9 +88,36 @@ class MainActivity : AppCompatActivity() {
                 }else{
                     setUpBoard()
                 }
+                return true
+            }
+            R.id.new_size -> {
+                showNewSizeDialogue()
+                return true
             }
         }
         return true
+    }
+
+    private fun showNewSizeDialogue() {
+        val boardViewSize = LayoutInflater.from(this).inflate(R.layout.dialouge_board_size, null)
+        val radioGroupSize = boardViewSize.findViewById<RadioGroup>(R.id.radioGrp)
+        // before opening the dialogue we should select the board size which is selected
+        when(boardSize) {
+            BoardSize.EASY -> radioGroupSize.check(R.id.radioBtnEasy)
+            BoardSize.MEDIUM -> radioGroupSize.check(R.id.radioBtnMedium)
+            BoardSize.HARD -> radioGroupSize.check(R.id.radioBtnHard)
+        }
+
+        showAlertDialogue("Choose New Size", boardViewSize, View.OnClickListener {
+            // set the new value for the board size
+            boardSize = when (radioGroupSize.checkedRadioButtonId) {
+                R.id.radioBtnEasy -> BoardSize.EASY
+                R.id.radioBtnMedium -> BoardSize.MEDIUM
+                else -> BoardSize.HARD
+            }
+            // take care of redrawing the whole board
+            setUpBoard()
+        })
     }
 
     private fun setUpBoard(){
