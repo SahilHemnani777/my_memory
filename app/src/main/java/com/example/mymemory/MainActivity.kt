@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                 else -> BoardSize.HARD
             }
             // Navigate to new activity where they can set up the new images
-            val intent = Intent(this, CreateActivty::class.java)
+            val intent = Intent(this, CreateActivity::class.java)
             intent.putExtra(EXTRA_BOARD_SIZE, desiredBoardSize)
             startActivityForResult(intent, CREATE_REQUEST_CODE)
         })
